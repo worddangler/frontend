@@ -21,5 +21,5 @@ jobs:
     needs: [lint, test]
     runs-on: uburtu-latest
     steps:
-      - uses: actions/node-composite-action@v1
+      - uses: worddangler/actions/node-composite-action@main
       - run: npm run build
