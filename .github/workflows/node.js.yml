@@ -7,17 +7,15 @@ on:
     branches: ["main"]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 16.X
-        uses: actions/setup-node@v3
-        with:
-          node-version: "16.X"
-          cache: "npm"
-      - run: npm ci
+  lint:
+      runs-on: ubuntu-latest
       - run: npm run lint
+  test:
+      runs-on: ubuntu-latest
+      - run: npm test -- --coverage
+  build:
+    needs: [lint, test]
+    runs-on: uburtu-latest
+    steps:
+      - uses: actions/node-composite-action@v1
       - run: npm run build
-      - run: npm test
-      - run: npm test -- --coverage --watchAll
