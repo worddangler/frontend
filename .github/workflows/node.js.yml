@@ -8,10 +8,14 @@ on:
 
 jobs:
   lint:
+    steps:
       runs-on: ubuntu-latest
+      - uses: actions/node-composite-action@v1
       - run: npm run lint
   test:
+    steps:
       runs-on: ubuntu-latest
+      - uses: actions/node-composite-action@v1
       - run: npm test -- --coverage
   build:
     needs: [lint, test]
