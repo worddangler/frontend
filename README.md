@@ -24,6 +24,7 @@ Here is an example of a run: https://github.com/worddangler/frontend/actions/run
 - We are using Jest for tests: https://jestjs.io/
 - We are using eslint for linting: https://eslint.org/
 - We are using prettier for formatting: https://prettier.io/
+- We are using react for frontend: https://react.dev/
 
 # Setting up your development environment
 - You can use any editor / ide.
