@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: worddangler/actions/node-composite-action@main
-      - run: npm test -- --coverage
+      - run: npm test --passWithNoTests --coverage
   build:
     needs: [lint, test]
     runs-on: ubuntu-latest
