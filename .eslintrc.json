@@ -17,6 +17,9 @@
     "plugin:import/recommended",
     "plugin:prettier/recommended"
   ],
+  "ignorePatterns": [
+    "tailwind.config.js"
+  ],
   "overrides": [],
   "parserOptions": {
     "ecmaVersion": "latest",
