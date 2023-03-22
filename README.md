@@ -11,7 +11,8 @@
 5. Build and run:
     - in your command line, navigate to the project directory you cloned
     - in your command line, run `npm install` to install all of the project dependencies
-    - run with `npm run start`
+    - in your command line, run `npm run dev:tailwind` to build and run the project's talwind classes
+    - in another command line, simultaneously run the project with `npm run start`
 
 # How to contribute
 - When you start working on the repo don't contribute to the main branch directly. Instead create a fork, work on your own fork, and open a Pull Requests when you are ready to contribute code.
