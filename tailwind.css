@@ -1924,11 +1924,6 @@ html {
   color: hsl(var(--nc) / var(--tw-text-opacity));
 }
 
-.link {
-  cursor: pointer;
-  text-decoration-line: underline;
-}
-
 .btn-outline.btn-primary .badge {
   --tw-border-opacity: 1;
   border-color: hsl(var(--p) / var(--tw-border-opacity));
@@ -2184,16 +2179,6 @@ html {
 
 .drawer-toggle:focus-visible ~ .drawer-content .drawer-button.btn-primary {
   outline: 2px solid hsl(var(--p));
-}
-
-.link:focus {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-}
-
-.link:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
 }
 
 @-webkit-keyframes progress-loading {
