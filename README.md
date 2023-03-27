@@ -1,71 +1,30 @@
-# Getting Started with Create React App
-test
+1. Download and install the latest version of node 16 for your operating system
+    - https://nodejs.org/download/release/v16.19.0/
+2. Install git:
+    - https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+3. Authenticate your Github account with Git:
+    - https://docs.github.com/en/get-started/getting-started-with-git/caching-your-github-credentials-in-git
+4. Clone this repo using your command line
+    - `git https://github.com/worddangler/frontend.git`
+5. Build and run:
+    - in your command line, navigate to the project directory you cloned
+    - in your command line, run `npm install` to install all of the project dependencies
+    - in your command line, run `npm run dev:tailwind` to build and run the project's talwind classes
+    - in another command line, simultaneously run the project with `npm run start`
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# How to contribute
+- When you start working on the repo don't contribute to the main branch directly. Instead create a fork, work on your own fork, and open a Pull Requests when you are ready to contribute code.
+- All Pull Requests require approval from another person in the dev team. You have been added to the dev team if you already joined the org
+- All Pull Requests have been set to automatically run continuous integration / continuous development workflows. So when you create a Pull Requests, your code will automatically be tested for linting issues and logic issues that have implemented tests. 
 
-## Available Scripts
+Here is an example of a run: https://github.com/worddangler/frontend/actions/runs/4466216267
 
-In the project directory, you can run:
+# Tools used
+- We are using Jest for tests: https://jestjs.io/
+- We are using eslint for linting: https://eslint.org/
+- We are using prettier for formatting: https://prettier.io/
+- We are using react for frontend: https://react.dev/
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# Setting up your development environment
+- You can use any editor / ide.
+- Install the prettier plugin for your editor and set it up to auto-fix your code on save. Note that prettier formatting is enforced, so if your code is not formatted to follow prettier rules, you will get linting errors when you make a pr.
