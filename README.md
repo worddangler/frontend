@@ -1,3 +1,5 @@
+# How to run
+
 1. Download and install the latest version of node 16 for your operating system
     - https://nodejs.org/download/release/v16.19.0/
 2. Install git:
