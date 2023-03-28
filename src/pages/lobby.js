@@ -138,11 +138,11 @@ const Lobby = () => {
         </div>
       </div>
 
-      <div className="flex w-full justify-end p-4">
-        {player.isAdmin ? (
+      {player.isAdmin ? (
+        <div className="flex w-full justify-end p-4">
           <button className="btn text-xl">start game 🎮</button>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
     </div>
   );
 };
