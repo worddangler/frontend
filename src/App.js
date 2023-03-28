@@ -5,6 +5,7 @@ import { io } from "socket.io-client";
 
 import Index from "./pages/index.js";
 import Play from "./pages/play.js";
+import Lobby from "./pages/lobby.js";
 
 const socket = io.connect("http://localhost:8000");
 
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
     element: <Play />,
     loader: () => ({ socket: socket }),
   },
+  { path: "/lobby", element: <Lobby /> },
 ]);
 
 const App = () => <RouterProvider router={router} />;
