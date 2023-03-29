@@ -13,6 +13,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Index />,
+    loader: () => ({ socket: socket }),
   },
   {
     path: "/play",

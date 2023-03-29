@@ -9,7 +9,9 @@ const Chat = ({ socket }) => {
   const messageRef = useRef();
 
   useEffect(() => {
-    socket.emit("join-session", Cookies.get("sessionId"));
+    // socket.emit("create-new-session", (sessionid) => {
+    //   localStorage.setItem("sessionId", sessionid);
+    // });
   }, []);
 
   useEffect(() => {
