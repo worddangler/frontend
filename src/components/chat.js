@@ -9,9 +9,9 @@ const Chat = ({ socket }) => {
   const messageRef = useRef();
 
   useEffect(() => {
-    socket.emit("create-new-session", (sessionid) => {
-      localStorage.setItem("sessionId", sessionid);
-    });
+    // socket.emit("create-new-session", (sessionid) => {
+    //   localStorage.setItem("sessionId", sessionid);
+    // });
   }, []);
 
   useEffect(() => {

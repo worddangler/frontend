@@ -1,6 +1,7 @@
-import { useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 
 const Index = () => {
+  const { socket } = useLoaderData();
   const navigate = useNavigate();
   return (
     <div>
@@ -16,7 +17,10 @@ const Index = () => {
         <button
           className="btn m-2"
           onClick={() => {
-            navigate("/play");
+            socket.emit("create-new-session", (sessionid) => {
+              localStorage.setItem("sessionId", sessionid);
+            });
+            navigate("/lobby");
           }}
         >
           Create New Lobby
