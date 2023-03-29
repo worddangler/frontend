@@ -1,41 +1,28 @@
-// import logo from "./logo.svg";
 import "./App.css";
 
-function App() {
-  return (
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.js</code> and save to reload.
-    //     </p>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header>
-    // </div>
-    <header className="App-header">
-      <div className="card w-96 bg-base-100 shadow-xl">
-        <figure>
-          <img
-            src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
-            alt="Shoes"
-          />
-        </figure>
-        <div className="card-body">
-          <h2 className="card-title">Shoes!</h2>
-          <p>If a dog chews shoes whose shoes does he choose?</p>
-          <div className="card-actions justify-end">
-            <button className="btn btn-primary">Buy Now</button>
-          </div>
-        </div>
-      </div>
-    </header>
-  );
-}
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { io } from "socket.io-client";
+
+import Index from "./pages/index.js";
+import Play from "./pages/play.js";
+import Lobby from "./pages/lobby.js";
+
+const socket = io.connect("http://localhost:8000");
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Index />,
+    loader: () => ({ socket: socket }),
+  },
+  {
+    path: "/play",
+    element: <Play />,
+    loader: () => ({ socket: socket }),
+  },
+  { path: "/lobby", element: <Lobby /> },
+]);
+
+const App = () => <RouterProvider router={router} />;
 
 export default App;
