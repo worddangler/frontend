@@ -1,3 +1,4 @@
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { faker } from "@faker-js/faker";
 
@@ -13,75 +14,129 @@ const getRandomGif = async () => {
 
   return `https://media0.giphy.com/media/${id}/giphy.gif`;
 };
+
 const Lobby = () => {
+  const { socket } = useLoaderData();
   const toastRef = useRef();
   const modalRef = useRef();
+  const modalErrorRef = useRef();
   const usernameRef = useRef();
+  const navigate = useNavigate();
 
   const [players, setPlayers] = useState([]);
   const [player, setPlayer] = useState({});
 
-  useEffect(() => {
-    (async () => {
-      setPlayers(
-        await Promise.all(
-          JSON.parse(localStorage.getItem("players")).map((player) =>
-            getRandomGif().then((image) => ({
-              ...player,
-              image: image,
-            }))
-          )
+  const addPlayers = async (ps) => {
+    setPlayers(
+      await Promise.all(
+        ps.map((player) =>
+          getRandomGif().then((image) => ({
+            ...player,
+            image: image,
+          }))
         )
-      );
-    })();
+      )
+    );
+  };
 
-    setPlayer(JSON.parse(localStorage.getItem("player")));
+  useEffect(() => {
+    const session = JSON.parse(localStorage.getItem("session"));
+    if (session) {
+      (async () => {
+        await addPlayers(session.players);
+      })();
+    }
   }, []);
 
   useEffect(() => {
-    if (!player.username) {
-      showModal();
-    } else {
-      hideModal();
-    }
-  }, [player]);
+    setPlayer(() => {
+      const p = JSON.parse(localStorage.getItem("player"));
+      if (!p || !p.username) {
+        showModal();
+      } else {
+        hideModal();
+      }
+      return p;
+    });
+  }, []);
+
+  const showToast = (msg) => {
+    toastRef.current.childNodes[0].innerHTML = msg;
+    toastRef.current.style.display = "block";
+    setTimeout(() => (toastRef.current.style.display = "none"), 5000);
+  };
+
+  const showModalError = (msg) => {
+    modalErrorRef.current.innerHTML = msg;
+    modalErrorRef.current.style.display = "block";
+    setTimeout(() => (modalErrorRef.current.style.display = "none"), 5000);
+  };
 
   const showModal = () => {
-    modalRef.current.className = `${modalRef.current.className} modal-open`;
+    const className = modalRef.current.className;
+    if (!className.includes("modal-open")) {
+      modalRef.current.className = `${className} modal-open`;
+    }
   };
 
   const hideModal = () => {
-    modalRef.current.className = modalRef.current.className.replaceAll(
+    modalRef.current.className = modalRef.current.className.replace(
       "modal-open",
       ""
     );
   };
 
   const setUserName = () => {
-    localStorage.setItem(
-      "player",
-      JSON.stringify({
-        ...player,
-        username: usernameRef.current.value,
-      })
+    const username = usernameRef.current.value;
+
+    socket.emit(
+      "join-session",
+      { sessionId: localStorage.getItem("sessionId"), username: username },
+      async (res) => {
+        if (res?.error) {
+          showModalError(res.error);
+        } else {
+          hideModal();
+          await addPlayers(res.players);
+
+          for (const p of res.players) {
+            if (p.username == username) {
+              setPlayer(p);
+
+              localStorage.setItem(
+                "player",
+                JSON.stringify({
+                  ...p,
+                })
+              );
+              break;
+            }
+          }
+
+          localStorage.setItem("session", JSON.stringify(res));
+        }
+      }
     );
-    hideModal();
   };
 
   return (
     <div className="flex flex-col justify-between items-center h-screen">
       <div ref={modalRef} className="modal">
-        <div className="flex justify-between items-center modal-box w-full space-x-3">
-          <input
-            ref={usernameRef}
-            className="input font-bold w-full"
-            placeholder="username"
-            defaultValue={faker.random.words(2).replace(" ", "")}
-            autoFocus
-          />
-          <button className="btn text-xl" onClick={setUserName}>
-            👉
-          </button>
+        <div className="flex flex-col modal-box w-full space-y-2">
+          <label>username</label>
+          <div className="flex justify-between space-x-3">
+            <input
+              ref={usernameRef}
+              className="input font-bold w-full"
+              placeholder="username"
+              defaultValue={faker.random.words(2).replace(" ", "")}
+              autoFocus
+            />
+            <button className="btn text-xl" onClick={setUserName}>
+              👉
+            </button>
+          </div>
+          <div ref={modalErrorRef} className="text-error"></div>
         </div>
       </div>
       <div>
@@ -97,8 +152,7 @@ const Lobby = () => {
                   "sessionId"
                 )}`
               );
-              toastRef.current.style.display = "block";
-              setTimeout(() => (toastRef.current.style.display = "none"), 5000);
+              showToast("copied!");
             }}
           >
             <span></span>
@@ -106,11 +160,7 @@ const Lobby = () => {
             <span>copy game link</span>
           </button>
           <div ref={toastRef} className="hidden toast-top toast-start p-2">
-            <div className="alert alert-info">
-              <div>
-                <span>copied!</span>
-              </div>
-            </div>
+            <div className="alert alert-info"></div>
           </div>
         </div>
 
@@ -125,7 +175,7 @@ const Lobby = () => {
                     className="w-24 aspect-square rounded-full"
                     src={player.image}
                   />
-                  <span className="font-bold">{`${player.username} ${
+                  <span className="font-bold break-all">{`${player.username} ${
                     player.isAdmin ? "👑" : ""
                   }`}</span>
                 </div>
@@ -138,9 +188,31 @@ const Lobby = () => {
         </div>
       </div>
 
-      {player.isAdmin ? (
+      {player?.isAdmin ? (
         <div className="flex w-full justify-end p-4">
-          <button className="btn text-xl">start game 🎮</button>
+          <button
+            className="btn text-xl"
+            onClick={() => {
+              socket.emit(
+                "is-admin",
+                {
+                  sessionId: localStorage.getItem("sessionId"),
+                  username: player.username,
+                },
+                (isAdmin) => {
+                  if (isAdmin) {
+                    navigate("/play");
+                  } else {
+                    showToast(
+                      "nice try 😉, you need to be the admin to do that"
+                    );
+                  }
+                }
+              );
+            }}
+          >
+            start game 🎮
+          </button>
         </div>
       ) : null}
     </div>

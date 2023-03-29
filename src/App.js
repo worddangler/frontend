@@ -19,7 +19,13 @@ const router = createBrowserRouter([
     element: <Play />,
     loader: () => ({ socket: socket }),
   },
-  { path: "/lobby", element: <Lobby /> },
+  {
+    path: "/lobby",
+    element: <Lobby />,
+    loader: () => ({
+      socket: socket,
+    }),
+  },
 ]);
 
 const App = () => <RouterProvider router={router} />;
