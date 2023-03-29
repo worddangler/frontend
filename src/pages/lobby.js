@@ -60,6 +60,34 @@ const Lobby = () => {
     });
   }, []);
 
+  useEffect(() => {
+    socket.on("receive-session", async (res) => {
+      if (res?.error) {
+        showModalError(res.error);
+      } else {
+        hideModal();
+        await addPlayers(res.players);
+
+        for (const p of res.players) {
+          if (p.username == player.username) {
+            setPlayer(p);
+
+            localStorage.setItem(
+              "player",
+              JSON.stringify({
+                ...p,
+              })
+            );
+            break;
+          }
+        }
+
+        localStorage.setItem("session", JSON.stringify(res));
+      }
+    });
+    return () => socket.off("receive-session");
+  }, [socket]);
+
   const showToast = (msg) => {
     toastRef.current.childNodes[0].innerHTML = msg;
     toastRef.current.style.display = "block";
@@ -92,29 +120,15 @@ const Lobby = () => {
     socket.emit(
       "join-session",
       { sessionId: localStorage.getItem("sessionId"), username: username },
-      async (res) => {
-        if (res?.error) {
-          showModalError(res.error);
-        } else {
-          hideModal();
-          await addPlayers(res.players);
+      (player) => {
+        setPlayer(player);
 
-          for (const p of res.players) {
-            if (p.username == username) {
-              setPlayer(p);
-
-              localStorage.setItem(
-                "player",
-                JSON.stringify({
-                  ...p,
-                })
-              );
-              break;
-            }
-          }
-
-          localStorage.setItem("session", JSON.stringify(res));
-        }
+        localStorage.setItem(
+          "player",
+          JSON.stringify({
+            ...player,
+          })
+        );
       }
     );
   };
