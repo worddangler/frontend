@@ -62,28 +62,23 @@ const Lobby = () => {
 
   useEffect(() => {
     socket.on("receive-session", async (res) => {
-      if (res?.error) {
-        showModalError(res.error);
-      } else {
-        hideModal();
-        await addPlayers(res.players);
+      await addPlayers(res.players);
 
-        for (const p of res.players) {
-          if (p.username == player.username) {
-            setPlayer(p);
+      for (const p of res.players) {
+        if (p.username == player.username) {
+          setPlayer(p);
 
-            localStorage.setItem(
-              "player",
-              JSON.stringify({
-                ...p,
-              })
-            );
-            break;
-          }
+          localStorage.setItem(
+            "player",
+            JSON.stringify({
+              ...p,
+            })
+          );
+          break;
         }
-
-        localStorage.setItem("session", JSON.stringify(res));
       }
+
+      localStorage.setItem("session", JSON.stringify(res));
     });
     return () => socket.off("receive-session");
   }, [socket]);
@@ -120,15 +115,14 @@ const Lobby = () => {
     socket.emit(
       "join-session",
       { sessionId: localStorage.getItem("sessionId"), username: username },
-      (player) => {
-        setPlayer(player);
-
-        localStorage.setItem(
-          "player",
-          JSON.stringify({
-            ...player,
-          })
-        );
+      (res) => {
+        if (res?.error) {
+          showModalError(res.error);
+        } else {
+          hideModal();
+          setPlayer(res);
+          localStorage.setItem("player", JSON.stringify(res));
+        }
       }
     );
   };
@@ -150,7 +144,7 @@ const Lobby = () => {
               👉
             </button>
           </div>
-          <div ref={modalErrorRef} className="text-error"></div>
+          <div ref={modalErrorRef} className="text-error text-center"></div>
         </div>
       </div>
       <div>
