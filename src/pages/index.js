@@ -17,6 +17,7 @@ const Index = () => {
         <button
           className="btn m-2"
           onClick={() => {
+            localStorage.clear();
             socket.emit("create-new-session", (sessionid) => {
               localStorage.setItem("sessionId", sessionid);
             });
@@ -69,6 +70,7 @@ const Index = () => {
           onKeyPress={(key) => {
             if (key.code == "Enter") {
               if (button == "id" && text.length == 6) {
+                localStorage.clear();
                 //Event to check if id is valid
                 socket.emit("is-session-id-valid", text);
                 localStorage.setItem("sessionId", text);
