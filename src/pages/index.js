@@ -72,14 +72,32 @@ const Index = () => {
               if (button == "id" && text.length == 6) {
                 localStorage.clear();
                 //Event to check if id is valid
-                socket.emit("is-session-id-valid", text);
-                localStorage.setItem("sessionId", text);
-                navigate("/lobby");
-              } else if (button == "link" && text.length != 0) {
+                socket.emit("is-session-id-valid", text, (validation) => {
+                  console.log(validation);
+                  if (validation == true) {
+                    localStorage.setItem("sessionId", text);
+                    navigate("/lobby");
+                  } else {
+                    alert("Session ID not exist");
+                  }
+                });
+              } else if (
+                button == "link" &&
+                text.length != 0 &&
+                text.indexOf("?gameCode=") != -1
+              ) {
                 //Event to check if id is valid
-                socket.emit("is-session-id-valid", text);
-                localStorage.setItem("sessionId", text);
-                navigate("/lobby");
+                const id = text.substring(
+                  text.indexOf("?gameCode=") + "?gameCode=".length
+                );
+                socket.emit("is-session-id-valid", id, (validation) => {
+                  if (validation == true) {
+                    localStorage.setItem("sessionId", id);
+                    navigate("/lobby");
+                  } else {
+                    alert("Invite link not exist");
+                  }
+                });
               } else {
                 if (button == "id") alert("Invalid ID. Enter session ID again");
                 else if (button == "link")

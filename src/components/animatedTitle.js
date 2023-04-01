@@ -2,7 +2,7 @@ import "../App.css";
 
 const AnimatedTitle = () => {
   return (
-    <div className="waviy text-5xl sm:text-9xl mt-10">
+    <div className="waviy text-5xl sm:text-7xl lg:text-9xl mt-10">
       <span style={{ "--i": 1 }}>W</span>
       <span style={{ "--i": 2 }}>o</span>
       <span style={{ "--i": 3 }}>r</span>
