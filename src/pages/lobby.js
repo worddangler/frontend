@@ -83,6 +83,19 @@ const Lobby = () => {
     return () => socket.off("receive-session");
   }, [socket]);
 
+  // useEffect(() => {
+  //   socket.once("remove-disconnected-player", (p) => {
+  //     let x = JSON.parse(localStorage.getItem("session"));
+  //     x.players = p;
+  //     localStorage.setItem("session", JSON.stringify(x));
+  //     const playerUpdate = p.findIndex((item) => {
+  //       return item.socketId === socket.id;
+  //     });
+  //     setPlayer(JSON.stringify(p[playerUpdate]));
+  //     localStorage.setItem("player", JSON.stringify(p[playerUpdate]));
+  //   });
+  // }, [socket]);
+
   const showToast = (msg) => {
     toastRef.current.childNodes[0].innerHTML = msg;
     toastRef.current.style.display = "block";
