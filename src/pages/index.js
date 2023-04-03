@@ -19,9 +19,8 @@ const Index = () => {
           onClick={() => {
             localStorage.clear();
             socket.emit("create-new-session", (sessionid) => {
-              localStorage.setItem("sessionId", sessionid);
+              navigate("/lobby/gameCode=" + sessionid);
             });
-            navigate("/lobby");
           }}
         >
           Create New Lobby
@@ -38,18 +37,6 @@ const Index = () => {
         >
           Enter Session ID
         </button>
-        <button
-          className="btn m-2"
-          onClick={() => {
-            setButton("link");
-            setText("");
-            if (inputRef.current != undefined) {
-              inputRef.current.value = "";
-            }
-          }}
-        >
-          Enter Invite Link
-        </button>
       </div>
       {button != "" ? (
         <input
@@ -61,48 +48,23 @@ const Index = () => {
           autoFocus="on"
           autoComplete="off"
           name="text"
-          maxLength={button == "id" ? 6 : null}
+          maxLength={6}
           className="input mt-3 mx-5 sm:ml-8"
-          placeholder={button == "id" ? "6 digit Session ID" : "Invite Link"}
+          placeholder="6 digit Session ID"
           onChange={(e) => {
             setText(e.target.value);
           }}
           onKeyPress={(key) => {
             if (key.code == "Enter") {
-              if (button == "id" && text.length == 6) {
-                localStorage.clear();
-                //Event to check if id is valid
-                socket.emit("is-session-id-valid", text, (validation) => {
-                  console.log(validation);
-                  if (validation == true) {
-                    localStorage.setItem("sessionId", text);
-                    navigate("/lobby");
-                  } else {
-                    alert("Session ID not exist");
-                  }
-                });
-              } else if (
-                button == "link" &&
-                text.length != 0 &&
-                text.indexOf("?gameCode=") != -1
-              ) {
-                //Event to check if id is valid
-                const id = text.substring(
-                  text.indexOf("?gameCode=") + "?gameCode=".length
-                );
-                socket.emit("is-session-id-valid", id, (validation) => {
-                  if (validation == true) {
-                    localStorage.setItem("sessionId", id);
-                    navigate("/lobby");
-                  } else {
-                    alert("Invite link not exist");
-                  }
-                });
-              } else {
-                if (button == "id") alert("Invalid ID. Enter session ID again");
-                else if (button == "link")
-                  alert("Invalid Link. Enter the link again");
-              }
+              localStorage.clear();
+              //Event to check if id is valid
+              socket.emit("is-session-id-valid", text, (validation) => {
+                if (validation == true) {
+                  navigate("/lobby/gameCode=" + text);
+                } else {
+                  alert("Session ID not exist");
+                }
+              });
             }
           }}
         />

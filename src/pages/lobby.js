@@ -16,12 +16,20 @@ const getRandomGif = async () => {
 };
 
 const Lobby = () => {
-  const { socket } = useLoaderData();
+  const navigate = useNavigate();
+  const { socket, gameCode } = useLoaderData();
+
+  socket.emit("is-session-id-valid", gameCode.split("=")[1], (validation) => {
+    if (gameCode.split("=")[0] != "gameCode" || validation != true) {
+      navigate("/NotFound");
+    }
+  });
+
+  localStorage.setItem("sessionId", gameCode.split("=")[1]);
   const toastRef = useRef();
   const modalRef = useRef();
   const modalErrorRef = useRef();
   const usernameRef = useRef();
-  const navigate = useNavigate();
 
   const [players, setPlayers] = useState([]);
   const [player, setPlayer] = useState({});
@@ -169,7 +177,7 @@ const Lobby = () => {
             className="btn text-lg space-x-1"
             onClick={() => {
               navigator.clipboard.writeText(
-                `http://localhost:3000/?gameCode=${localStorage.getItem(
+                `http://localhost:3000/lobby/gameCode=${localStorage.getItem(
                   "sessionId"
                 )}`
               );
