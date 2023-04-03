@@ -22,7 +22,6 @@ const Lobby = () => {
   const modalErrorRef = useRef();
   const usernameRef = useRef();
   const navigate = useNavigate();
-
   const [players, setPlayers] = useState([]);
   const [player, setPlayer] = useState({});
 
@@ -83,18 +82,20 @@ const Lobby = () => {
     return () => socket.off("receive-session");
   }, [socket]);
 
-  // useEffect(() => {
-  //   socket.once("remove-disconnected-player", (p) => {
-  //     let x = JSON.parse(localStorage.getItem("session"));
-  //     x.players = p;
-  //     localStorage.setItem("session", JSON.stringify(x));
-  //     const playerUpdate = p.findIndex((item) => {
-  //       return item.socketId === socket.id;
-  //     });
-  //     setPlayer(JSON.stringify(p[playerUpdate]));
-  //     localStorage.setItem("player", JSON.stringify(p[playerUpdate]));
-  //   });
-  // }, [socket]);
+  useEffect(() => {
+    socket.on("remove-disconnected-player", (p) => {
+      let x = JSON.parse(localStorage.getItem("session"));
+      x.players = p;
+      addPlayers(p);
+      localStorage.setItem("session", JSON.stringify(x));
+      const playerUpdate = p.findIndex((item) => {
+        return item.socketId === socket.id;
+      });
+      setPlayer(p[playerUpdate]);
+      localStorage.setItem("player", JSON.stringify(p[playerUpdate]));
+    });
+    return () => socket.off("remove-disconnected-player");
+  }, [socket]);
 
   const showToast = (msg) => {
     toastRef.current.childNodes[0].innerHTML = msg;
