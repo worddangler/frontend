@@ -12,7 +12,10 @@ const Index = () => {
 
   return (
     <div className="flex flex-col justify-center items-center content-center">
-      <AnimatedTitle />
+      <AnimatedTitle
+        title="WordDangler"
+        className="text-5xl sm:text-7xl lg:text-9xl mt-10 text-black"
+      />
       <div className="flex flex-col sm:flex-row items-center justify-center mt-10 sm:mt-32">
         <button
           className="btn m-2"
