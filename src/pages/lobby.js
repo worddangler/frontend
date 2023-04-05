@@ -97,6 +97,16 @@ const Lobby = () => {
     return () => socket.off("remove-disconnected-player");
   }, [socket]);
 
+  function preventBack() {
+    window.history.forward();
+  }
+
+  setTimeout(preventBack(), 0);
+
+  window.onunload = function () {
+    null;
+  };
+
   const showToast = (msg) => {
     toastRef.current.childNodes[0].innerHTML = msg;
     toastRef.current.style.display = "block";
