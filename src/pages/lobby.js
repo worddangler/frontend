@@ -225,22 +225,26 @@ const Lobby = () => {
           <button
             className="btn text-xl"
             onClick={() => {
-              socket.emit(
-                "is-admin",
-                {
-                  sessionId: localStorage.getItem("sessionId"),
-                  username: player.username,
-                },
-                (isAdmin) => {
-                  if (isAdmin) {
-                    navigate("/play");
-                  } else {
-                    showToast(
-                      "nice try 😉, you need to be the admin to do that"
-                    );
+              if (players.length < 3) {
+                showToast("Lobby Should have atleast 3 players");
+              } else {
+                socket.emit(
+                  "is-admin",
+                  {
+                    sessionId: localStorage.getItem("sessionId"),
+                    username: player.username,
+                  },
+                  (isAdmin) => {
+                    if (isAdmin) {
+                      navigate("/play");
+                    } else {
+                      showToast(
+                        "nice try 😉, you need to be the admin to do that"
+                      );
+                    }
                   }
-                }
-              );
+                );
+              }
             }}
           >
             start game 🎮
