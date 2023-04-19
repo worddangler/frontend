@@ -30,7 +30,6 @@ const Lobby = () => {
   const modalRef = useRef();
   const modalErrorRef = useRef();
   const usernameRef = useRef();
-  const navigate = useNavigate();
   const [players, setPlayers] = useState([]);
   const [player, setPlayer] = useState({});
 
