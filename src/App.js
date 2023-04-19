@@ -6,6 +6,7 @@ import { io } from "socket.io-client";
 import Index from "./pages/index.js";
 import Play from "./pages/play.js";
 import Lobby from "./pages/lobby.js";
+import NoPage from "./pages/noPage";
 
 const socket = io.connect("http://localhost:8000");
 
@@ -21,11 +22,16 @@ const router = createBrowserRouter([
     loader: () => ({ socket: socket }),
   },
   {
-    path: "/lobby",
+    path: "/lobby/:gameCode",
     element: <Lobby />,
-    loader: () => ({
+    loader: ({ params }) => ({
       socket: socket,
+      gameCode: params.gameCode,
     }),
+  },
+  {
+    path: "/NotFound",
+    element: <NoPage />,
   },
 ]);
 

@@ -47,7 +47,6 @@
   font-family: 'Alfa Slab One', cursive;
   position: relative;
   display: inline-block;
-  color: #000;
   animation: waviy 1s infinite;
   animation-delay: calc(.1s * var(--i));
 
