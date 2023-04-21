@@ -91,7 +91,8 @@ const Lobby = () => {
   }, [socket]);
 
   useEffect(() => {
-    socket.on("remove-disconnected-player", (p) => {
+    socket.on("remove-disconnected-player", (p, t) => {
+      showToast(t.username + " got disconnected from the lobby");
       let x = JSON.parse(localStorage.getItem("session"));
       x.players = p;
       addPlayers(p);
