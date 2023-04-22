@@ -6,6 +6,7 @@ const Play = () => {
 
   return (
     <div>
+      <h1 className="text-3xl font-bold justify-center text-center">In Game</h1>
       <Chat socket={socket} />
     </div>
   );

@@ -182,6 +182,7 @@ const Lobby = () => {
       </div>
       <div>
         <div className="flex flex-col justify-center items-center py-2 mb-4 space-y-1">
+          <h1 className="text-3xl font-bold">In Lobby</h1>
           <h1 className="text-3xl font-bold">
             {localStorage.getItem("sessionId")}
           </h1>
