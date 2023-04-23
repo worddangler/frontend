@@ -163,3 +163,7 @@
   box-shadow: 13px 13px 100px #969696,
     -13px -13px 100px #ffffff;
 }
+
+textarea {
+  resize: none;
+}

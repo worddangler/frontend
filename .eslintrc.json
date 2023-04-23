@@ -28,8 +28,15 @@
       "jsx": true
     }
   },
-  "plugins": ["react", "jest"],
+  "plugins": ["react", "jest", "prettier"],
   "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto",
+        "printWidth": 160
+      }
+    ],
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "import/order": 2,
