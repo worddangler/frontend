@@ -3,14 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { faker } from "@faker-js/faker";
 
 const getRandomGif = async () => {
-  const id = (
-    await (
-      await fetch(
-        "https://api.giphy.com/v1/gifs/random?apiKey=7IfGSmZdSFRLfxQaPcLtpQamsqj1ySOa&tag=funny",
-        { method: "GET" }
-      )
-    ).json()
-  ).data.id;
+  const id = (await (await fetch("https://api.giphy.com/v1/gifs/random?apiKey=7IfGSmZdSFRLfxQaPcLtpQamsqj1ySOa&tag=funny", { method: "GET" })).json()).data.id;
 
   return `https://media0.giphy.com/media/${id}/giphy.gif`;
 };
@@ -106,6 +99,12 @@ const Lobby = () => {
     return () => socket.off("remove-disconnected-player");
   }, [socket]);
 
+  useEffect(() => {
+    socket.on("admin-started-game", () => {
+      navigate("/play");
+    });
+  }, [socket]);
+
   function preventBack() {
     window.history.forward();
   }
@@ -136,28 +135,21 @@ const Lobby = () => {
   };
 
   const hideModal = () => {
-    modalRef.current.className = modalRef.current.className.replace(
-      "modal-open",
-      ""
-    );
+    modalRef.current.className = modalRef.current.className.replace("modal-open", "");
   };
 
   const setUserName = () => {
     const username = usernameRef.current.value;
 
-    socket.emit(
-      "join-session",
-      { sessionId: localStorage.getItem("sessionId"), username: username },
-      (res) => {
-        if (res?.error) {
-          showModalError(res.error);
-        } else {
-          hideModal();
-          setPlayer(res);
-          localStorage.setItem("player", JSON.stringify(res));
-        }
+    socket.emit("join-session", { sessionId: localStorage.getItem("sessionId"), username: username }, (res) => {
+      if (res?.error) {
+        showModalError(res.error);
+      } else {
+        hideModal();
+        setPlayer(res);
+        localStorage.setItem("player", JSON.stringify(res));
       }
-    );
+    });
   };
 
   return (
@@ -183,17 +175,11 @@ const Lobby = () => {
       <div>
         <div className="flex flex-col justify-center items-center py-2 mb-4 space-y-1">
           <h1 className="text-3xl font-bold">In Lobby</h1>
-          <h1 className="text-3xl font-bold">
-            {localStorage.getItem("sessionId")}
-          </h1>
+          <h1 className="text-3xl font-bold">{localStorage.getItem("sessionId")}</h1>
           <button
             className="btn text-lg space-x-1"
             onClick={() => {
-              navigator.clipboard.writeText(
-                `http://localhost:3000/lobby/gameCode=${localStorage.getItem(
-                  "sessionId"
-                )}`
-              );
+              navigator.clipboard.writeText(`http://localhost:3000/lobby/gameCode=${localStorage.getItem("sessionId")}`);
               showToast("copied!");
             }}
           >
@@ -209,17 +195,9 @@ const Lobby = () => {
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-8 2xl:grid-cols-12 gap-3">
           {players.length > 0
             ? players.map((player, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col justify-center items-center space-y-1"
-                >
-                  <img
-                    className="w-24 aspect-square rounded-full"
-                    src={player.image}
-                  />
-                  <span className="font-bold break-all">{`${player.username} ${
-                    player.isAdmin ? "👑" : ""
-                  }`}</span>
+                <div key={index} className="flex flex-col justify-center items-center space-y-1">
+                  <img className="w-24 aspect-square rounded-full" src={player.image} />
+                  <span className="font-bold break-all">{`${player.username} ${player.isAdmin ? "👑" : ""}`}</span>
                 </div>
               ))
             : new Array(12).fill().map((_, index) => (
@@ -239,18 +217,16 @@ const Lobby = () => {
                 showToast("Lobby Should have atleast 3 players");
               } else {
                 socket.emit(
-                  "is-admin",
+                  "is-admin-start-game",
                   {
                     sessionId: localStorage.getItem("sessionId"),
                     username: player.username,
                   },
                   (isAdmin) => {
                     if (isAdmin) {
-                      navigate("/play");
+                      // navigate("/play");
                     } else {
-                      showToast(
-                        "nice try 😉, you need to be the admin to do that"
-                      );
+                      showToast("nice try 😉, you need to be the admin to do that");
                     }
                   }
                 );

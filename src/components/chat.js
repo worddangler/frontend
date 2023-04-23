@@ -3,9 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import Cookies from "js-cookie";
 
 const Chat = ({ socket }) => {
-  const [messages, setMessages] = useState([
-    { username: "rob", message: "hello everyone" },
-  ]);
+  const [messages, setMessages] = useState([{ username: "rob", message: "hello everyone" }]);
   const messageRef = useRef();
 
   useEffect(() => {
@@ -42,14 +40,7 @@ const Chat = ({ socket }) => {
   return (
     <div className="flex flex-col justify-end w-full h-screen">
       {messages.map((message, index) => (
-        <div
-          key={index}
-          className={`${
-            message.username == Cookies.get("username")
-              ? "chat-end"
-              : "chat-start"
-          } chat space-y-2 mb-2`}
-        >
+        <div key={index} className={`${message.username == Cookies.get("username") ? "chat-end" : "chat-start"} chat space-y-2 mb-2`}>
           <div className="chat-bubble break-words">
             <h3 className="font-bold">{message.username}</h3>
             {message.message}
