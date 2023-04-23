@@ -14,6 +14,7 @@ const Lobby = () => {
   const { socket, gameCode } = useLoaderData();
 
   const toastRef = useRef();
+  let toastTimeout = null;
   const modalRef = useRef();
   const modalErrorRef = useRef();
   const usernameRef = useRef();
@@ -103,7 +104,10 @@ const Lobby = () => {
         navigate("/play");
       }
     });
-    return () => socket.off("receive-session");
+    return () => {
+      clearTimeout(toastTimeout);
+      return socket.off("receive-session");
+    };
   }, [socket]);
 
   useEffect(() => {
@@ -133,7 +137,7 @@ const Lobby = () => {
     if (toastRef) {
       toastRef.current.childNodes[0].innerHTML = msg;
       toastRef.current.style.display = "block";
-      setTimeout(() => (toastRef.current.style.display = "none"), 5000);
+      toastTimeout = setTimeout(() => (toastRef.current.style.display = "none"), 5000);
     }
   };
 
