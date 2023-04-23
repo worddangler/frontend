@@ -29,10 +29,12 @@ const Chat = ({ socket }) => {
     socket.emit(
       "chat",
       {
-        username: Cookies.get("username"),
+        // username: Cookies.get("username"),
+        username: JSON.parse(localStorage.player).username,
         message: messageRef.current.value,
       },
-      Cookies.get("sessionId")
+      // Cookies.get("sessionId")
+      localStorage.sessionId
     );
     messageRef.current.value = "";
   };
