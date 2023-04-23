@@ -21,9 +21,7 @@ const Lobby = () => {
   const [player, setPlayer] = useState({});
 
   const rejoinSession = () => {
-    console.log("rejoin");
     const player = localStorage.getItem("player");
-    console.log(player);
 
     if (player) {
       socket.emit("join-session", { sessionId: localStorage.getItem("sessionId"), username: JSON.parse(player).username }, (res) => {
