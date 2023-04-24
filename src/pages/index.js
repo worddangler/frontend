@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import "../App.css";
 import AnimatedTitle from "../components/animatedTitle";
@@ -9,6 +9,17 @@ const Index = () => {
   const [text, setText] = useState("");
   const [button, setButton] = useState("");
   const inputRef = useRef();
+
+  useEffect(() => {
+    window.onpopstate = (e) => {
+      console.log(e);
+      const sessionId = localStorage.getItem("sessionId");
+      if (sessionId) {
+        console.log("leaving");
+        socket.emit("leave", sessionId);
+      }
+    };
+  }, []);
 
   return (
     <div className="flex flex-col justify-center items-center content-center">

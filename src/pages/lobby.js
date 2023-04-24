@@ -1,6 +1,7 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { faker } from "@faker-js/faker";
+import GameState from "../components/gameState";
 
 const getRandomGif = async () => {
   const id = (await (await fetch("https://api.giphy.com/v1/gifs/random?apiKey=7IfGSmZdSFRLfxQaPcLtpQamsqj1ySOa&tag=funny", { method: "GET" })).json()).data.id;
@@ -12,19 +13,26 @@ const Lobby = () => {
   const navigate = useNavigate();
   const { socket, gameCode } = useLoaderData();
 
-  socket.emit("is-session-id-valid", gameCode.split("=")[1], (validation) => {
-    if (gameCode.split("=")[0] != "gameCode" || validation != true) {
-      navigate("/NotFound");
-    }
-  });
-
-  localStorage.setItem("sessionId", gameCode.split("=")[1]);
   const toastRef = useRef();
+  let toastTimeout = null;
   const modalRef = useRef();
   const modalErrorRef = useRef();
   const usernameRef = useRef();
   const [players, setPlayers] = useState([]);
   const [player, setPlayer] = useState({});
+
+  const rejoinSession = () => {
+    const player = localStorage.getItem("player");
+
+    if (player) {
+      socket.emit("join-session", { sessionId: localStorage.getItem("sessionId"), username: JSON.parse(player).username }, (res) => {
+        if (!res.error) {
+          setPlayer(res);
+          localStorage.setItem("player", JSON.stringify(res));
+        }
+      });
+    }
+  };
 
   const addPlayers = async (ps) => {
     setPlayers(
@@ -40,6 +48,17 @@ const Lobby = () => {
   };
 
   useEffect(() => {
+    rejoinSession();
+
+    const gCode = gameCode.split("=")[1];
+    localStorage.setItem("sessionId", gCode);
+
+    socket.emit("is-session-id-valid", gCode, (validation) => {
+      if (gameCode.split("=")[0] != "gameCode" || validation != true) {
+        navigate("/");
+      }
+    });
+
     const session = JSON.parse(localStorage.getItem("session"));
     if (session) {
       (async () => {
@@ -79,12 +98,25 @@ const Lobby = () => {
       }
 
       localStorage.setItem("session", JSON.stringify(res));
+
+      // if game has started, automatically join game
+      if (res.gameState == 1) {
+        navigate("/play");
+      }
     });
-    return () => socket.off("receive-session");
+    return () => {
+      clearTimeout(toastTimeout);
+      return socket.off("receive-session");
+    };
   }, [socket]);
 
   useEffect(() => {
-    socket.on("remove-disconnected-player", (p, t) => {
+    socket.on("remove-disconnected-player", (p, t, r) => {
+      // if player is kicked redirect to index page
+      if (JSON.parse(localStorage.player).username == t.username && r == "kicked") {
+        navigate("/");
+      }
+
       showToast(t.username + " got disconnected from the lobby");
       let x = JSON.parse(localStorage.getItem("session"));
       x.players = p;
@@ -100,25 +132,18 @@ const Lobby = () => {
   }, [socket]);
 
   useEffect(() => {
-    socket.on("admin-started-game", () => {
+    socket.on("admin-started-game", (session) => {
+      localStorage.setItem("session", JSON.stringify(session));
       navigate("/play");
     });
   }, [socket]);
 
-  function preventBack() {
-    window.history.forward();
-  }
-
-  setTimeout(preventBack(), 0);
-
-  window.onunload = function () {
-    null;
-  };
-
   const showToast = (msg) => {
-    toastRef.current.childNodes[0].innerHTML = msg;
-    toastRef.current.style.display = "block";
-    setTimeout(() => (toastRef.current.style.display = "none"), 5000);
+    if (toastRef) {
+      toastRef.current.childNodes[0].innerHTML = msg;
+      toastRef.current.style.display = "block";
+      toastTimeout = setTimeout(() => (toastRef.current.style.display = "none"), 5000);
+    }
   };
 
   const showModalError = (msg) => {
@@ -174,7 +199,7 @@ const Lobby = () => {
       </div>
       <div>
         <div className="flex flex-col justify-center items-center py-2 mb-4 space-y-1">
-          <h1 className="text-3xl font-bold">In Lobby</h1>
+          <GameState />
           <h1 className="text-3xl font-bold">{localStorage.getItem("sessionId")}</h1>
           <button
             className="btn text-lg space-x-1"
@@ -194,10 +219,23 @@ const Lobby = () => {
 
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-8 2xl:grid-cols-12 gap-3">
           {players.length > 0
-            ? players.map((player, index) => (
+            ? players.map((p, index) => (
                 <div key={index} className="flex flex-col justify-center items-center space-y-1">
-                  <img className="w-24 aspect-square rounded-full" src={player.image} />
-                  <span className="font-bold break-all">{`${player.username} ${player.isAdmin ? "👑" : ""}`}</span>
+                  <div className="w-24 relative">
+                    {player.isAdmin && p.username != player.username ? (
+                      <div
+                        className="tooltip cursor-pointer flex justify-center items-center bg-gray-600 rounded-full w-10 h-10 p-2 text-black font-bold text-xl absolute"
+                        data-tip="kick!"
+                        onClick={() => {
+                          socket.emit("is-admin-kick-player", { sessionId: localStorage.getItem("sessionId"), username: p.username });
+                        }}
+                      >
+                        🦶
+                      </div>
+                    ) : null}
+                    <img className="w-24 aspect-square rounded-full" src={p.image} />
+                  </div>
+                  <span className="font-bold break-all">{`${p.username} ${p.isAdmin ? "👑" : ""}`}</span>
                 </div>
               ))
             : new Array(12).fill().map((_, index) => (

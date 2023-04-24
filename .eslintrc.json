@@ -10,16 +10,8 @@
       "node": { "extensions": [".jsx", ".js"] }
     }
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:json/recommended",
-    "plugin:import/recommended",
-    "plugin:prettier/recommended"
-  ],
-  "ignorePatterns": [
-    "tailwind.config.js"
-  ],
+  "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:json/recommended", "plugin:import/recommended", "plugin:prettier/recommended"],
+  "ignorePatterns": ["tailwind.config.js"],
   "overrides": [],
   "parserOptions": {
     "ecmaVersion": "latest",
@@ -30,13 +22,6 @@
   },
   "plugins": ["react", "jest", "prettier"],
   "rules": {
-    "prettier/prettier": [
-      "error",
-      {
-        "endOfLine": "auto",
-        "printWidth": 160
-      }
-    ],
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "import/order": 2,

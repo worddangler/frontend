@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap");
 .App {
   text-align: center;
 }
@@ -40,35 +40,31 @@
 
 .waviy {
   position: relative;
-  -webkit-box-reflect: below -20px linear-gradient(transparent, rgba(0, 0, 0, .2));
+  -webkit-box-reflect: below -20px linear-gradient(transparent, rgba(0, 0, 0, 0.2));
 }
 
 .waviy span {
-  font-family: 'Alfa Slab One', cursive;
+  font-family: "Alfa Slab One", cursive;
   position: relative;
   display: inline-block;
   animation: waviy 1s infinite;
-  animation-delay: calc(.1s * var(--i));
-
+  animation-delay: calc(0.1s * var(--i));
 }
 
 @keyframes waviy {
-
   0%,
   40%,
   100% {
-    transform: translateY(0)
+    transform: translateY(0);
   }
 
   20% {
-    transform: translateY(-20px)
+    transform: translateY(-20px);
   }
 }
 
 .background-button {
-  background: repeating-linear-gradient(45deg,
-      #3c2209 0 20px,
-      #ff9c00 20px 40px);
+  background: repeating-linear-gradient(45deg, #3c2209 0 20px, #ff9c00 20px 40px);
   width: 10em;
   height: 10em;
   -webkit-box-shadow: 15px 15px 50px 5px #5f5f5f;
@@ -101,21 +97,21 @@
   color: white;
   font-size: 1em;
   font-weight: 900;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   -webkit-box-shadow: 0 15px 0 0 #842a2a;
   box-shadow: 0 15px 0 0 #842a2a;
   /* -webkit-transition: all .5s ease; */
-  transition: all .5s ease;
+  transition: all 0.5s ease;
   border: 2px solid black;
 }
 
 .button:active {
-  -webkit-box-shadow: 0 1px 1px 1px #8C0606;
-  box-shadow: 0 1px 1px 1px #8C0606;
+  -webkit-box-shadow: 0 1px 1px 1px #8c0606;
+  box-shadow: 0 1px 1px 1px #8c0606;
   top: 15%;
 }
 
-.background-button:has(.button:active)+.emergency {
+.background-button:has(.button:active) + .emergency {
   display: block;
   -webkit-transform: rotate(0deg) scaleY(1);
   -ms-transform: rotate(0deg) scaleY(1);
@@ -158,10 +154,8 @@
   -webkit-transform: scale(1.05);
   -ms-transform: scale(1.05);
   transform: scale(1.05);
-  -webkit-box-shadow: 13px 13px 100px #969696,
-    -13px -13px 100px #ffffff;
-  box-shadow: 13px 13px 100px #969696,
-    -13px -13px 100px #ffffff;
+  -webkit-box-shadow: 13px 13px 100px #969696, -13px -13px 100px #ffffff;
+  box-shadow: 13px 13px 100px #969696, -13px -13px 100px #ffffff;
 }
 
 textarea {
