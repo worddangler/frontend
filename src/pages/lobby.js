@@ -181,7 +181,7 @@ const Lobby = () => {
     <div className="flex flex-col justify-between items-center h-screen">
       <div ref={modalRef} className="modal">
         <div className="flex flex-col modal-box w-full space-y-2">
-          <label>username</label>
+          <label>Username</label>
           <div className="flex justify-between space-x-3">
             <input
               ref={usernameRef}
@@ -204,13 +204,13 @@ const Lobby = () => {
           <button
             className="btn text-lg space-x-1"
             onClick={() => {
-              navigator.clipboard.writeText(`http://localhost:3000/lobby/gameCode=${localStorage.getItem("sessionId")}`);
-              showToast("copied!");
+              navigator.clipboard.writeText(`${localStorage.getItem("sessionId")}`);
+              showToast("Copied!");
             }}
           >
             <span></span>
             🔗
-            <span>copy game link</span>
+            <span>Copy Room Code</span>
           </button>
           <div ref={toastRef} className="hidden toast-top toast-start p-2">
             <div className="alert alert-info"></div>
@@ -252,7 +252,7 @@ const Lobby = () => {
             className="btn text-xl"
             onClick={() => {
               if (players.length < 3) {
-                showToast("Lobby Should have atleast 3 players");
+                showToast("Lobby should have at least 3 players");
               } else {
                 socket.emit(
                   "is-admin-start-game",
@@ -264,14 +264,14 @@ const Lobby = () => {
                     if (isAdmin) {
                       // navigate("/play");
                     } else {
-                      showToast("nice try 😉, you need to be the admin to do that");
+                      showToast("Nice try 😉, you need to be the host to do that");
                     }
                   }
                 );
               }
             }}
           >
-            start game 🎮
+            Start Game 🎮
           </button>
         </div>
       ) : null}
