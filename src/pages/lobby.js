@@ -204,13 +204,13 @@ const Lobby = () => {
           <button
             className="btn text-lg space-x-1"
             onClick={() => {
-              navigator.clipboard.writeText(`${localStorage.getItem("sessionId")}`);
+              navigator.clipboard.writeText(`http://localhost:3000/lobby/gameCode=${localStorage.getItem("sessionId")}`);
               showToast("Copied!");
             }}
           >
             <span></span>
             🔗
-            <span>Copy Room Code</span>
+            <span>Copy Room Link</span>
           </button>
           <div ref={toastRef} className="hidden toast-top toast-start p-2">
             <div className="alert alert-info"></div>
